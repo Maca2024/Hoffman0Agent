@@ -499,6 +499,27 @@ _LANGUAGE_INSTRUCTIONS: dict[str, str] = {
 # Internal helpers
 # ---------------------------------------------------------------------------
 
+def get_agent_profile(dimension: int) -> dict:
+    """Return full agent profile for a single dimension."""
+    if dimension not in _DIMENSION_META:
+        raise ValueError(f"Dimension {dimension} not in range 1-9.")
+    label, agent_name, medicine, instruction = _DIMENSION_META[dimension]
+    return {
+        "dimension": dimension,
+        "label": label,
+        "agent_name": agent_name,
+        "substance": medicine,
+        "cognitive_instruction": instruction,
+        "voice_persona": _VOICE_PERSONA.get(dimension, ""),
+        "substance_context": _SUBSTANCE_CONTEXT.get(dimension, ""),
+    }
+
+
+def get_all_agent_profiles() -> list[dict]:
+    """Return agent profiles for all 9 dimensions."""
+    return [get_agent_profile(d) for d in sorted(_DIMENSION_META)]
+
+
 def _validate_dimensions(dimensions: list[int]) -> list[int]:
     """Return deduplicated, sorted, validated dimension list."""
     valid = sorted({d for d in dimensions if d in _DIMENSION_META})

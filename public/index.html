@@ -301,6 +301,273 @@ body {
   background: white;
 }
 
+/* Sidebar tabs */
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sidebar-tab:hover { color: var(--text-muted); }
+.sidebar-tab.active {
+  color: #A78BFA;
+  border-bottom-color: #A78BFA;
+}
+
+.sidebar-panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+.sidebar-panel.active { display: flex; }
+
+/* Agent Library panel */
+.agent-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+
+.agent-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .25s ease;
+  font-family: inherit;
+  color: var(--text-muted);
+  text-align: left;
+  width: 100%;
+}
+
+.agent-card:hover { background: rgba(255,255,255,.02); border-color: var(--border); color: var(--text); }
+.agent-card.active { background: rgba(255,255,255,.04); border-color: var(--border-active); color: var(--text); }
+
+.agent-card .agent-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+
+.agent-card .agent-meta { flex: 1; min-width: 0; }
+.agent-card .agent-name { font-size: 13px; font-weight: 600; display: block; line-height: 1.3; }
+.agent-card .agent-sub { font-size: 11px; color: var(--text-dim); display: block; line-height: 1.3; }
+
+/* Agent detail panel (replaces main when viewing) */
+.agent-detail-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 10;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.agent-detail-overlay.active { display: flex; }
+
+.agent-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.agent-detail-back {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.agent-detail-back:hover { background: rgba(255,255,255,.04); color: var(--text); }
+
+.agent-detail-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-detail-title h2 { font-size: 18px; font-weight: 600; }
+.agent-detail-title .detail-sub { font-size: 13px; color: var(--text-muted); }
+
+.agent-detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+
+.detail-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.detail-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+
+.detail-section-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #C4B5FD;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.detail-section-header .chevron {
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: transform .2s;
+}
+
+.detail-section-header.open .chevron { transform: rotate(180deg); }
+
+.detail-section-body {
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  display: none;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.detail-section-body.open { display: block; }
+
+.detail-section-body .voice-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.voice-config-item {
+  background: var(--bg);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+
+.voice-config-item .vc-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.voice-config-item .vc-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.detail-section-body pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin: 8px 0 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+}
+
+.copy-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-dim);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.copy-btn:hover { color: var(--text); border-color: var(--border-active); }
+.copy-btn.copied { color: #22c55e; border-color: #22c55e; }
+
+/* Promptstack section links */
+.section-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.section-chip {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.section-chip:hover { color: var(--text); border-color: var(--border-active); }
+.section-chip.active { color: #A78BFA; border-color: rgba(167,139,250,.3); background: rgba(167,139,250,.05); }
+
 /* Session info */
 .session-info {
   padding: 12px 20px;
@@ -766,36 +1033,49 @@ body {
       <div class="subtitle">9D Consciousness Agent</div>
     </div>
 
-    <div class="mol-section">
-      <div class="mol-section-title">Molecules</div>
-      <div class="mol-grid" id="molGrid"></div>
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" data-panel="chat-panel">Chat</button>
+      <button class="sidebar-tab" data-panel="agents-panel">Agents</button>
     </div>
 
-    <div class="controls-section">
-      <div class="control-group">
-        <span class="control-label">Dose</span>
-        <div class="dose-row">
-          <input type="range" class="dose-slider" min="0" max="4" value="2" id="doseSlider">
-          <span class="dose-value" id="doseVal">common</span>
-        </div>
+    <!-- Chat panel (default) -->
+    <div class="sidebar-panel active" id="chat-panel">
+      <div class="mol-section">
+        <div class="mol-section-title">Molecules</div>
+        <div class="mol-grid" id="molGrid"></div>
       </div>
 
-      <div class="control-group">
-        <span class="control-label">Language</span>
-        <div class="segmented" id="langGroup">
-          <button class="seg-btn active" data-lang="nl">NL</button>
-          <button class="seg-btn" data-lang="en">EN</button>
-          <button class="seg-btn" data-lang="de">DE</button>
+      <div class="controls-section">
+        <div class="control-group">
+          <span class="control-label">Dose</span>
+          <div class="dose-row">
+            <input type="range" class="dose-slider" min="0" max="4" value="2" id="doseSlider">
+            <span class="dose-value" id="doseVal">common</span>
+          </div>
         </div>
-      </div>
 
-      <div class="control-group">
-        <span class="control-label">Sound</span>
-        <div class="toggle-row">
-          <span style="font-size:12px;color:var(--text-dim)">Generative audio</span>
-          <button class="toggle-switch" id="audioToggle"></button>
+        <div class="control-group">
+          <span class="control-label">Language</span>
+          <div class="segmented" id="langGroup">
+            <button class="seg-btn active" data-lang="nl">NL</button>
+            <button class="seg-btn" data-lang="en">EN</button>
+            <button class="seg-btn" data-lang="de">DE</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">Sound</span>
+          <div class="toggle-row">
+            <span style="font-size:12px;color:var(--text-dim)">Generative audio</span>
+            <button class="toggle-switch" id="audioToggle"></button>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Agents panel -->
+    <div class="sidebar-panel" id="agents-panel">
+      <div class="agent-list" id="agentList"></div>
     </div>
 
     <div class="session-info">
@@ -805,7 +1085,7 @@ body {
   </aside>
 
   <!-- MAIN -->
-  <main class="main">
+  <main class="main" style="position:relative;">
     <div class="orb-header">
       <div class="orb-wrap" id="orb">
         <canvas id="orbCanvas" width="128" height="128"></canvas>
@@ -834,6 +1114,20 @@ body {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </div>
+    </div>
+
+    <!-- Agent detail overlay -->
+    <div class="agent-detail-overlay" id="agentDetailOverlay">
+      <div class="agent-detail-header">
+        <button class="agent-detail-back" id="agentDetailBack" title="Back to chat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="agent-detail-title">
+          <h2 id="agentDetailName"></h2>
+          <div class="detail-sub" id="agentDetailSub"></div>
+        </div>
+      </div>
+      <div class="agent-detail-body" id="agentDetailBody"></div>
     </div>
   </main>
 </div>
@@ -1492,6 +1786,237 @@ document.getElementById('audioToggle').addEventListener('click', function() {
   const on = audioEngine.toggle();
   this.classList.toggle('active', on);
 });
+
+// ═══ SIDEBAR TABS ═══
+document.querySelectorAll('.sidebar-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.panel).classList.add('active');
+  });
+});
+
+// ═══ AGENT LIBRARY ═══
+const agentListEl = document.getElementById('agentList');
+let agentCache = null;
+
+const AGENT_NAMES = {
+  1: 'HOFMANN', 2: 'STRASSMAN', 3: 'STAMETS', 4: 'MECHOULAM',
+  5: 'HUXLEY', 6: 'LOTSOF', 7: 'VOID', 8: 'MITHOEFER', 9: 'LILLY'
+};
+
+async function loadAgentList() {
+  if (agentCache) return agentCache;
+  try {
+    const res = await fetch(`${API}/api/agents`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    agentCache = await res.json();
+    renderAgentList(agentCache);
+    return agentCache;
+  } catch (err) {
+    agentListEl.innerHTML = `<p style="padding:16px;color:#F43F5E;font-size:13px">Could not load agents: ${err.message}</p>`;
+    return null;
+  }
+}
+
+function renderAgentList(agents) {
+  agentListEl.innerHTML = '';
+  agents.forEach(agent => {
+    const mol = MOLECULES.find(m => m.d === agent.dimension);
+    const card = document.createElement('button');
+    card.className = 'agent-card';
+    card.innerHTML = `
+      <span class="agent-icon" style="background:${mol?.color || '#666'}">D${agent.dimension}</span>
+      <span class="agent-meta">
+        <span class="agent-name">${agent.agent_name} — ${agent.substance}</span>
+        <span class="agent-sub">${agent.label} Dimension</span>
+      </span>
+    `;
+    card.addEventListener('click', () => openAgentDetail(agent.dimension));
+    agentListEl.appendChild(card);
+  });
+}
+
+// Load agents when the Agents tab is first clicked
+document.querySelector('[data-panel="agents-panel"]').addEventListener('click', () => {
+  loadAgentList();
+}, { once: true });
+
+// ═══ AGENT DETAIL ═══
+const detailOverlay = document.getElementById('agentDetailOverlay');
+
+document.getElementById('agentDetailBack').addEventListener('click', () => {
+  detailOverlay.classList.remove('active');
+});
+
+async function openAgentDetail(dimension) {
+  const mol = MOLECULES.find(m => m.d === dimension);
+  const color = mol?.color || '#A78BFA';
+
+  document.getElementById('agentDetailName').textContent = `${AGENT_NAMES[dimension]} — ${mol?.name || '?'}`;
+  document.getElementById('agentDetailName').style.color = color;
+  document.getElementById('agentDetailSub').textContent = `D${dimension} ${mol?.label || ''} Dimension`;
+
+  const body = document.getElementById('agentDetailBody');
+  body.innerHTML = '<div style="padding:20px;color:var(--text-dim)">Loading agent profile...</div>';
+  detailOverlay.classList.add('active');
+
+  try {
+    const res = await fetch(`${API}/api/agents/${dimension}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderAgentDetail(data, color);
+  } catch (err) {
+    body.innerHTML = `<p style="padding:20px;color:#F43F5E">Error: ${err.message}</p>`;
+  }
+}
+
+function renderAgentDetail(data, color) {
+  const p = data.profile;
+  const body = document.getElementById('agentDetailBody');
+
+  const voiceNames = {1:'Daniel',2:'Callum',3:'Eric',4:'Roger',5:'Bill',6:'Adam',7:'River',8:'Lily',9:'Brian'};
+
+  body.innerHTML = `
+    <!-- Cognitive Instruction -->
+    ${detailSection('Cognitive Instruction', `<p>${escHtml(p.cognitive_instruction)}</p>`, true)}
+
+    <!-- Voice Persona -->
+    ${detailSection('Voice Persona', `<p style="font-style:italic;color:var(--text-muted)">${escHtml(p.voice_persona)}</p>`, true)}
+
+    <!-- Substance Context -->
+    ${detailSection('Substance Context (Pharmacology, History, Phenomenology)', `<p>${escHtml(p.substance_context)}</p>`, false)}
+
+    <!-- Voice Configuration -->
+    ${detailSection('Voice Configuration', `
+      <div class="voice-config-grid">
+        <div class="voice-config-item">
+          <span class="vc-label">Voice</span>
+          <span class="vc-value">${voiceNames[p.dimension] || '?'}</span>
+        </div>
+        <div class="voice-config-item">
+          <span class="vc-label">Voice ID</span>
+          <span class="vc-value" style="font-size:11px">${p.voice_config.voice_id?.slice(0,12) || '?'}...</span>
+        </div>
+        <div class="voice-config-item">
+          <span class="vc-label">Stability</span>
+          <span class="vc-value">${p.voice_config.stability}</span>
+        </div>
+        <div class="voice-config-item">
+          <span class="vc-label">Similarity</span>
+          <span class="vc-value">${p.voice_config.similarity_boost}</span>
+        </div>
+        <div class="voice-config-item">
+          <span class="vc-label">Style</span>
+          <span class="vc-value">${p.voice_config.style}</span>
+        </div>
+      </div>
+    `, true)}
+
+    <!-- Promptstack -->
+    ${detailSection('Promptstack', `
+      <p style="color:var(--text-dim);font-size:13px;margin-bottom:8px">
+        ${data.promptstack_sections.length} sections loaded
+      </p>
+      <div class="section-chips" id="sectionChips"></div>
+      <div id="promptstackContent" style="margin-top:12px">
+        <pre>${escHtml(data.promptstack_excerpt)}</pre>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="copy-btn" onclick="copyPromptstack(${p.dimension})">Copy full promptstack</button>
+        <button class="copy-btn" onclick="copySystemPrompt(${p.dimension})">Copy system prompt</button>
+      </div>
+    `, false)}
+  `;
+
+  // Render section chips
+  const chipsEl = document.getElementById('sectionChips');
+  if (chipsEl && data.promptstack_sections.length) {
+    data.promptstack_sections
+      .filter(s => s !== '__preamble__')
+      .forEach(section => {
+        const chip = document.createElement('button');
+        chip.className = 'section-chip';
+        chip.textContent = section;
+        chip.addEventListener('click', () => loadSection(p.dimension, section, chip));
+        chipsEl.appendChild(chip);
+      });
+  }
+
+  // Wire up collapsible sections
+  body.querySelectorAll('.detail-section-header').forEach(header => {
+    header.addEventListener('click', () => {
+      header.classList.toggle('open');
+      header.nextElementSibling.classList.toggle('open');
+    });
+  });
+}
+
+function detailSection(title, content, openByDefault) {
+  return `
+    <div class="detail-section">
+      <div class="detail-section-header ${openByDefault ? 'open' : ''}">
+        <h3>${title}</h3>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="detail-section-body ${openByDefault ? 'open' : ''}">
+        ${content}
+      </div>
+    </div>
+  `;
+}
+
+function escHtml(text) {
+  return (text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function loadSection(dimension, section, chip) {
+  document.querySelectorAll('.section-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  const contentEl = document.getElementById('promptstackContent');
+  contentEl.innerHTML = '<p style="color:var(--text-dim);font-size:13px">Loading section...</p>';
+  try {
+    const res = await fetch(`${API}/api/agents/${dimension}/promptstack?section=${encodeURIComponent(section)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    contentEl.innerHTML = `<pre>${escHtml(data.content)}</pre>`;
+  } catch (err) {
+    contentEl.innerHTML = `<p style="color:#F43F5E">Error: ${err.message}</p>`;
+  }
+}
+
+async function copyPromptstack(dimension) {
+  try {
+    const res = await fetch(`${API}/api/agents/${dimension}/promptstack`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    await navigator.clipboard.writeText(data.content);
+    showCopied(event.target);
+  } catch (err) {
+    alert('Copy failed: ' + err.message);
+  }
+}
+
+async function copySystemPrompt(dimension) {
+  try {
+    const agents = agentCache || await loadAgentList();
+    const agent = agents?.find(a => a.dimension === dimension);
+    if (!agent) throw new Error('Agent not found');
+    const prompt = `# ${agent.agent_name} — D${dimension} ${agent.label}\n\n## Cognitive Instruction\n${agent.cognitive_instruction}\n\n## Voice Persona\n${agent.voice_persona}\n\n## Substance Context\n${agent.substance_context}`;
+    await navigator.clipboard.writeText(prompt);
+    showCopied(event.target);
+  } catch (err) {
+    alert('Copy failed: ' + err.message);
+  }
+}
+
+function showCopied(btn) {
+  btn.classList.add('copied');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = orig; }, 1500);
+}
 </script>
 </body>
 </html>

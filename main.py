@@ -22,7 +22,7 @@ from services.claude_service import ClaudeService, ClaudeServiceError
 from services.elevenlabs_tts import ElevenLabsTTS, ElevenLabsTTSError
 from services.knowledge_loader import KnowledgeBase
 from services.memory import MemoryManager
-from services.prompt_builder import PromptBuilder
+from services.prompt_builder import PromptBuilder, get_agent_profile, get_all_agent_profiles
 
 # ---------------------------------------------------------------------------
 # Bootstrap
@@ -144,6 +144,24 @@ class DimensionInfo(BaseModel):
     substance: str
 
 
+class AgentProfile(BaseModel):
+    dimension: int
+    label: str
+    agent_name: str
+    substance: str
+    cognitive_instruction: str
+    voice_persona: str
+    substance_context: str
+    voice_config: dict
+    resonances: list[str] = Field(default_factory=list)
+
+
+class AgentDetailResponse(BaseModel):
+    profile: AgentProfile
+    promptstack_excerpt: str
+    promptstack_sections: list[str]
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -169,6 +187,73 @@ async def get_dimensions() -> list[DimensionInfo]:
     """Return metadata for all 9 consciousness dimensions."""
     raw = _knowledge_base.get_dimensions()
     return [DimensionInfo(**d) for d in raw]
+
+
+@app.get("/api/agents", response_model=list[AgentProfile])
+async def get_agents() -> list[AgentProfile]:
+    """Return full profiles for all 9 molecule agents."""
+    from services.elevenlabs_tts import MOLECULE_VOICES, DEFAULT_VOICE
+
+    profiles = get_all_agent_profiles()
+    result = []
+    for p in profiles:
+        voice_cfg = MOLECULE_VOICES.get(p["dimension"], DEFAULT_VOICE)
+        result.append(AgentProfile(
+            **p,
+            voice_config=voice_cfg,
+        ))
+    return result
+
+
+@app.get("/api/agents/{dimension}", response_model=AgentDetailResponse)
+async def get_agent_detail(dimension: int) -> AgentDetailResponse:
+    """Return detailed agent profile including promptstack excerpt."""
+    if dimension < 1 or dimension > 9:
+        raise HTTPException(status_code=422, detail="Dimension must be 1-9.")
+
+    from services.elevenlabs_tts import MOLECULE_VOICES, DEFAULT_VOICE
+
+    p = get_agent_profile(dimension)
+    voice_cfg = MOLECULE_VOICES.get(dimension, DEFAULT_VOICE)
+
+    profile = AgentProfile(**p, voice_config=voice_cfg)
+
+    # Get promptstack excerpt and section list
+    try:
+        full_stack = _knowledge_base.get_dimension(dimension)
+        excerpt = full_stack[:2000] + ("..." if len(full_stack) > 2000 else "")
+        sections = list(_knowledge_base._sections.get(
+            _knowledge_base._dim_to_stem.get(dimension, ""), {}
+        ).keys())
+    except (ValueError, KeyError):
+        excerpt = ""
+        sections = []
+
+    return AgentDetailResponse(
+        profile=profile,
+        promptstack_excerpt=excerpt,
+        promptstack_sections=sections,
+    )
+
+
+@app.get("/api/agents/{dimension}/promptstack")
+async def get_agent_promptstack(dimension: int, section: str | None = None):
+    """Return the full promptstack (or a specific section) for a dimension."""
+    if dimension < 1 or dimension > 9:
+        raise HTTPException(status_code=422, detail="Dimension must be 1-9.")
+
+    from services.knowledge_loader import DIMENSION_MAP
+    substance_key = DIMENSION_MAP.get(dimension, (None, None))[0]
+
+    if section and substance_key:
+        content = _knowledge_base.get_sections(substance_key, [section])
+    else:
+        try:
+            content = _knowledge_base.get_dimension(dimension)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    return {"dimension": dimension, "content": content}
 
 
 @app.post("/api/chat", response_model=ChatResponse)
