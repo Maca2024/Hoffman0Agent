@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HOFMANN - 9D Consciousness Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   HOFMANN 9D — Premium UI
+   Two-panel: sidebar (molecules+controls) | main (orb+chat)
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --bg: #0a0a12;
+  --surface: #12121e;
+  --surface2: #1a1a2e;
+  --surface3: #22223a;
+  --border: rgba(255,255,255,.06);
+  --border-active: rgba(255,255,255,.15);
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  /* Molecule colors */
+  --c1:#A78BFA; --c2:#D946EF; --c3:#34D399; --c4:#FBBF24;
+  --c5:#FB923C; --c6:#10B981; --c7:#E2E8F0; --c8:#EC4899; --c9:#6366F1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══ LAYOUT: sidebar + main ═══ */
+.app {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #818CF8, #A78BFA, #C4B5FD);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sidebar-header .subtitle {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Molecule Grid */
+.mol-section {
+  padding: 16px 12px;
+  flex: 1;
+}
+
+.mol-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 8px 8px;
+}
+
+.mol-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mol-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .25s ease;
+  font-family: inherit;
+  color: var(--text-muted);
+  text-align: left;
+  width: 100%;
+}
+
+.mol-card:hover {
+  background: rgba(255,255,255,.02);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.mol-card.active {
+  background: rgba(255,255,255,.04);
+  border-color: var(--border-active);
+  color: var(--text);
+}
+
+.mol-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: box-shadow .3s;
+}
+
+.mol-card.active .mol-dot {
+  box-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+}
+
+.mol-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mol-name {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  line-height: 1.3;
+}
+
+.mol-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: block;
+  line-height: 1.3;
+}
+
+.mol-dim {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: rgba(255,255,255,.03);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Controls section */
+.controls-section {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Segmented controls */
+.segmented {
+  display: flex;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+}
+
+.seg-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+}
+
+.seg-btn:hover { color: var(--text-muted); }
+.seg-btn.active {
+  background: var(--surface3);
+  color: var(--text);
+}
+
+/* Dose slider */
+.dose-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dose-slider {
+  -webkit-appearance: none;
+  flex: 1;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 4px;
+  outline: none;
+}
+
+.dose-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #6366F1;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(99,102,241,.15);
+  transition: box-shadow .2s;
+}
+
+.dose-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px rgba(99,102,241,.25);
+}
+
+.dose-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  min-width: 52px;
+  text-align: right;
+}
+
+/* Sound toggle */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-switch {
+  width: 36px;
+  height: 20px;
+  background: var(--surface3);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background .2s;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: all .2s;
+}
+
+.toggle-switch.active {
+  background: #6366F1;
+}
+
+.toggle-switch.active::after {
+  left: 19px;
+  background: white;
+}
+
+/* Session info */
+.session-info {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.session-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ═══ MAIN PANEL ═══ */
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Orb header */
+.orb-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.orb-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.orb-wrap canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.orb-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  transition: all .4s;
+}
+
+.orb-wrap.listening .orb-ring { border-color: #F43F5E; animation: pulse 1.5s ease infinite; }
+.orb-wrap.thinking .orb-ring { border-color: #A78BFA; animation: spin 2s linear infinite; }
+.orb-wrap.speaking .orb-ring { border-color: #6366F1; animation: pulse .8s ease infinite; }
+
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.1);opacity:.5} }
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+.orb-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.orb-substance-name {
+  font-size: 18px;
+  font-weight: 600;
+  transition: color .3s;
+}
+
+.orb-dimension-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.orb-status {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Mode pill in header */
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mode-pill {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.mode-pill.active {
+  background: rgba(99,102,241,.1);
+  border-color: rgba(99,102,241,.3);
+  color: #A78BFA;
+}
+
+.mode-pill:hover { border-color: var(--border-active); }
+
+/* ═══ CHAT AREA ═══ */
+.chat-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+
+/* Message bubbles */
+.message {
+  max-width: 780px;
+  animation: msgIn .3s ease;
+}
+
+@keyframes msgIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.message.user {
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.message.assistant {
+  align-self: flex-start;
+}
+
+.msg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.msg-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.msg-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.msg-body {
+  padding: 14px 18px;
+  border-radius: var(--radius-lg);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.message.user .msg-body {
+  background: rgba(99,102,241,.1);
+  border: 1px solid rgba(99,102,241,.15);
+  color: var(--text);
+  border-bottom-right-radius: 4px;
+}
+
+.message.assistant .msg-body {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+
+/* Markdown rendering in messages */
+.msg-body h1, .msg-body h2, .msg-body h3 {
+  color: #C4B5FD;
+  margin: 16px 0 8px;
+  line-height: 1.4;
+}
+
+.msg-body h1 { font-size: 18px; font-weight: 700; }
+.msg-body h2 { font-size: 16px; font-weight: 600; }
+.msg-body h3 { font-size: 15px; font-weight: 600; }
+.msg-body h1:first-child, .msg-body h2:first-child, .msg-body h3:first-child { margin-top: 0; }
+
+.msg-body p { margin: 8px 0; }
+.msg-body p:first-child { margin-top: 0; }
+.msg-body p:last-child { margin-bottom: 0; }
+
+.msg-body strong { color: #C4B5FD; font-weight: 600; }
+.msg-body em { color: var(--text-muted); font-style: italic; }
+
+.msg-body ul, .msg-body ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.msg-body li { margin: 4px 0; }
+
+.msg-body code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: rgba(255,255,255,.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #A78BFA;
+}
+
+.msg-body pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
+.msg-body pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.msg-body blockquote {
+  border-left: 3px solid rgba(99,102,241,.3);
+  padding-left: 14px;
+  color: var(--text-muted);
+  margin: 10px 0;
+}
+
+.msg-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.msg-body th, .msg-body td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.msg-body th {
+  font-weight: 600;
+  color: #C4B5FD;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.msg-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+/* Loading dots */
+.loading-dots {
+  display: flex;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  animation: dotBounce 1.2s ease infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: .2s; }
+.loading-dots span:nth-child(3) { animation-delay: .4s; }
+
+@keyframes dotBounce {
+  0%,100% { opacity:.2; transform:scale(.8); }
+  50% { opacity:1; transform:scale(1); }
+}
+
+/* ═══ INPUT BAR ═══ */
+.input-bar {
+  padding: 12px 24px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  max-width: 780px;
+}
+
+.input-field {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  resize: none;
+  min-height: 46px;
+  max-height: 120px;
+  line-height: 1.5;
+  transition: border-color .2s;
+}
+
+.input-field:focus {
+  border-color: rgba(99,102,241,.3);
+}
+
+.input-field::placeholder {
+  color: var(--text-dim);
+}
+
+.input-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.input-btn:hover {
+  background: rgba(99,102,241,.08);
+  border-color: rgba(99,102,241,.2);
+  color: var(--text);
+}
+
+.input-btn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+.input-btn.recording {
+  background: rgba(244,63,94,.1);
+  border-color: rgba(244,63,94,.3);
+  color: #F43F5E;
+  animation: pulse 1.5s ease infinite;
+}
+
+.send-btn {
+  background: #6366F1;
+  border-color: #6366F1;
+  color: white;
+}
+
+.send-btn:hover {
+  background: #5558E6;
+  border-color: #5558E6;
+}
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Collapse sidebar into horizontal strip */
+  .sidebar-header { display: none; }
+
+  .mol-section {
+    padding: 8px;
+  }
+
+  .mol-section-title { display: none; }
+
+  .mol-grid {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .mol-grid::-webkit-scrollbar { display: none; }
+
+  .mol-card {
+    flex-direction: column;
+    min-width: 70px;
+    padding: 8px;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .mol-info { text-align: center; }
+  .mol-label { display: none; }
+  .mol-dim { display: none; }
+  .mol-name { font-size: 11px; }
+
+  .controls-section {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .control-group { flex-direction: row; align-items: center; gap: 6px; }
+  .control-label { display: none; }
+
+  .session-info { display: none; }
+
+  .orb-header { padding: 10px 16px; gap: 12px; }
+  .orb-wrap { width: 48px; height: 48px; }
+  .orb-substance-name { font-size: 16px; }
+  .orb-dimension-label { font-size: 12px; }
+
+  .chat-container { padding: 12px 16px; gap: 12px; }
+  .msg-body { padding: 10px 14px; font-size: 14px; }
+  .input-bar { padding: 8px 16px 12px; }
+}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>HOFMANN</h1>
+      <div class="subtitle">9D Consciousness Agent</div>
+    </div>
+
+    <div class="mol-section">
+      <div class="mol-section-title">Molecules</div>
+      <div class="mol-grid" id="molGrid"></div>
+    </div>
+
+    <div class="controls-section">
+      <div class="control-group">
+        <span class="control-label">Dose</span>
+        <div class="dose-row">
+          <input type="range" class="dose-slider" min="0" max="4" value="2" id="doseSlider">
+          <span class="dose-value" id="doseVal">common</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Language</span>
+        <div class="segmented" id="langGroup">
+          <button class="seg-btn active" data-lang="nl">NL</button>
+          <button class="seg-btn" data-lang="en">EN</button>
+          <button class="seg-btn" data-lang="de">DE</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Sound</span>
+        <div class="toggle-row">
+          <span style="font-size:12px;color:var(--text-dim)">Generative audio</span>
+          <button class="toggle-switch" id="audioToggle"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="session-info">
+      <span class="session-dot"></span>
+      <span id="sessionInfo">New session</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="orb-header">
+      <div class="orb-wrap" id="orb">
+        <canvas id="orbCanvas" width="128" height="128"></canvas>
+        <div class="orb-ring"></div>
+      </div>
+      <div class="orb-meta">
+        <div class="orb-substance-name" id="orbName">LSD-25</div>
+        <div class="orb-dimension-label" id="orbDimLabel">D1 - Molecular Dimension</div>
+        <div class="orb-status" id="orbStatus">Ready</div>
+      </div>
+      <div class="header-actions">
+        <button class="mode-pill active" id="modeText">Text</button>
+        <button class="mode-pill" id="modeVoice">Voice</button>
+      </div>
+    </div>
+
+    <div class="chat-container" id="messages"></div>
+
+    <div class="input-bar">
+      <div class="input-row">
+        <button class="input-btn" id="micBtn" title="Voice input">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        </button>
+        <textarea class="input-field" id="chatInput" placeholder="Ask HOFMANN something..." rows="1"></textarea>
+        <button class="input-btn send-btn" id="sendBtn" title="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// HOFMANN 9D — Frontend Engine v3 (Premium UX)
+// ═══════════════════════════════════════════════════════════════
+
+const MOLECULES = [
+  { d:1, name:'LSD-25',    label:'Molecular',    desc:'Mechanisms & evidence',     color:'#A78BFA', glow:'168,139,250' },
+  { d:2, name:'DMT',       label:'Network',      desc:'Cross-domain connections',  color:'#D946EF', glow:'217,70,239' },
+  { d:3, name:'Psilocybin',label:'Mycelial',     desc:'Organic growth & branching',color:'#34D399', glow:'52,211,153' },
+  { d:4, name:'Cannabis',  label:'Entropic',     desc:'Creative chaos & signal',   color:'#FBBF24', glow:'251,191,36' },
+  { d:5, name:'Mescaline', label:'Ancestral',    desc:'Deep time patterns',        color:'#FB923C', glow:'251,146,60' },
+  { d:6, name:'Ibogaine',  label:'Initiatory',   desc:'Shadow confrontation',      color:'#10B981', glow:'16,185,129' },
+  { d:7, name:'5-MeO-DMT', label:'Dissolution',  desc:'Beyond the observer',       color:'#E2E8F0', glow:'226,232,240' },
+  { d:8, name:'MDMA',      label:'Empathic',     desc:'Emotional intelligence',    color:'#EC4899', glow:'236,72,153' },
+  { d:9, name:'Ketamine',  label:'Dissociative', desc:'Meta-cognition',            color:'#6366F1', glow:'99,102,241' },
+];
+
+const API = location.hostname === 'localhost' ? 'http://localhost:8200' : '';
+const DOSES = ['micro','light','common','strong','heroic'];
+const STORAGE_KEY = 'hofmann-session';
+
+const state = {
+  dims: [1],
+  dose: 'common',
+  lang: 'nl',
+  mode: 'text',
+  sessionId: localStorage.getItem(STORAGE_KEY) || null,
+  processing: false,
+  audioPlayer: null,
+};
+
+// ═══ SIMPLE MARKDOWN RENDERER ═══
+function renderMarkdown(text) {
+  let html = text
+    // Code blocks
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+    // Inline code
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // Bold & italic
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Blockquotes
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    // Horizontal rules
+    .replace(/^---$/gm, '<hr>')
+    // Tables (simple)
+    .replace(/^\|(.+)\|$/gm, (match) => {
+      const cells = match.split('|').filter(c => c.trim());
+      if (cells.every(c => /^[\s-:]+$/.test(c))) return ''; // separator row
+      const isHeader = false;
+      const tag = isHeader ? 'th' : 'td';
+      return '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+    });
+
+  // Wrap table rows
+  html = html.replace(/(<tr>[\s\S]*?<\/tr>(\s*<tr>[\s\S]*?<\/tr>)*)/g, '<table>$1</table>');
+
+  // Fix first row to use th
+  html = html.replace(/<table><tr>([\s\S]*?)<\/tr>/, (m, cells) => {
+    return '<table><tr>' + cells.replace(/<td>/g, '<th>').replace(/<\/td>/g, '</th>') + '</tr>';
+  });
+
+  // Unordered lists
+  html = html.replace(/(?:^|\n)((?:[-*] .+\n?)+)/g, (match, items) => {
+    const lis = items.trim().split('\n').map(li => `<li>${li.replace(/^[-*] /, '')}</li>`).join('');
+    return `<ul>${lis}</ul>`;
+  });
+
+  // Ordered lists
+  html = html.replace(/(?:^|\n)((?:\d+\. .+\n?)+)/g, (match, items) => {
+    const lis = items.trim().split('\n').map(li => `<li>${li.replace(/^\d+\. /, '')}</li>`).join('');
+    return `<ol>${lis}</ol>`;
+  });
+
+  // Paragraphs — split by double newline
+  html = html.split('\n\n').map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (/^<(h[1-3]|ul|ol|pre|table|blockquote|hr)/.test(block)) return block;
+    return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+
+  return html;
+}
+
+// ═══ MOLECULE GRID ═══
+const molGrid = document.getElementById('molGrid');
+MOLECULES.forEach(mol => {
+  const card = document.createElement('button');
+  card.className = `mol-card${mol.d === 1 ? ' active' : ''}`;
+  card.dataset.d = mol.d;
+  card.innerHTML = `
+    <span class="mol-dot" style="background:${mol.color};color:${mol.color}"></span>
+    <span class="mol-info">
+      <span class="mol-name">${mol.name}</span>
+      <span class="mol-label">${mol.desc}</span>
+    </span>
+    <span class="mol-dim">D${mol.d}</span>
+  `;
+  card.addEventListener('click', () => selectMolecule(mol.d, card));
+  molGrid.appendChild(card);
+});
+
+function selectMolecule(d, card) {
+  // Single-select mode: click to select, ctrl/cmd+click to multi-select
+  const isMulti = event && (event.ctrlKey || event.metaKey);
+
+  if (isMulti) {
+    if (card.classList.contains('active')) {
+      if (state.dims.length > 1) {
+        state.dims = state.dims.filter(x => x !== d);
+        card.classList.remove('active');
+      }
+    } else {
+      state.dims.push(d);
+      card.classList.add('active');
+    }
+  } else {
+    // Single select — deactivate all, activate this one
+    document.querySelectorAll('.mol-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    state.dims = [d];
+  }
+
+  updateOrbDisplay();
+  state.sessionId = null;
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('sessionInfo').textContent = 'New session';
+
+  if (audioEngine.active) audioEngine.play(state.dims[0]);
+}
+
+function updateOrbDisplay() {
+  const primary = MOLECULES.find(m => m.d === state.dims[0]) || MOLECULES[0];
+  const nameEl = document.getElementById('orbName');
+  const labelEl = document.getElementById('orbDimLabel');
+
+  if (state.dims.length === 1) {
+    nameEl.textContent = primary.name;
+    labelEl.textContent = `D${primary.d} \u2014 ${primary.label} Dimension`;
+  } else {
+    nameEl.textContent = state.dims.map(d => MOLECULES.find(m => m.d === d)?.name).join(' + ');
+    labelEl.textContent = `${state.dims.length} Dimensions Active`;
+  }
+  nameEl.style.color = primary.color;
+}
+
+updateOrbDisplay();
+
+// ═══ ORB CANVAS ═══
+const orbCanvas = document.getElementById('orbCanvas');
+const orbCtx = orbCanvas.getContext('2d');
+let orbTime = 0;
+
+function drawOrb() {
+  orbTime += .02;
+  const w = orbCanvas.width, h = orbCanvas.height;
+  const cx = w/2, cy = h/2, r = w/2 - 4;
+  orbCtx.clearRect(0, 0, w, h);
+
+  const mol = MOLECULES.find(m => m.d === state.dims[0]) || MOLECULES[0];
+  const rgb = mol.glow;
+
+  // Core glow
+  const g = orbCtx.createRadialGradient(cx, cy, 0, cx, cy, r);
+  g.addColorStop(0, `rgba(${rgb},.4)`);
+  g.addColorStop(.5, `rgba(${rgb},.12)`);
+  g.addColorStop(1, `rgba(${rgb},.03)`);
+  orbCtx.beginPath(); orbCtx.arc(cx, cy, r, 0, Math.PI*2);
+  orbCtx.fillStyle = g; orbCtx.fill();
+
+  // Per-substance animation
+  const dim = state.dims[0];
+  orbCtx.lineCap = 'round';
+
+  if (dim === 1) { // LSD: geometric crystalline
+    for (let i = 0; i < 6; i++) {
+      const a = orbTime * .8 + i * Math.PI / 3;
+      orbCtx.beginPath();
+      orbCtx.moveTo(cx + Math.cos(a) * r * .3, cy + Math.sin(a) * r * .3);
+      orbCtx.lineTo(cx + Math.cos(a + .5) * r * .7, cy + Math.sin(a + .5) * r * .7);
+      orbCtx.strokeStyle = `rgba(${rgb},.25)`; orbCtx.lineWidth = 1; orbCtx.stroke();
+    }
+  } else if (dim === 2) { // DMT: fractal bursts
+    for (let i = 0; i < 12; i++) {
+      const a = orbTime * 2 + i * Math.PI / 6;
+      const d = r * (.2 + Math.sin(orbTime * 3 + i) * .3);
+      orbCtx.beginPath();
+      orbCtx.arc(cx + Math.cos(a)*d, cy + Math.sin(a)*d, 3 + Math.sin(orbTime*4+i)*2, 0, Math.PI*2);
+      orbCtx.fillStyle = `rgba(${rgb},.2)`; orbCtx.fill();
+    }
+  } else if (dim === 3) { // Psilocybin: mycelial threads
+    for (let i = 0; i < 8; i++) {
+      orbCtx.beginPath();
+      let x = cx, y = cy;
+      const ba = orbTime * .4 + i * Math.PI / 4;
+      for (let j = 0; j < 12; j++) {
+        const a = ba + Math.sin(orbTime + j * .5) * .3;
+        x += Math.cos(a) * 5; y += Math.sin(a) * 5;
+        orbCtx.lineTo(x, y);
+      }
+      orbCtx.strokeStyle = `rgba(${rgb},.18)`; orbCtx.lineWidth = 1.2; orbCtx.stroke();
+    }
+  } else if (dim === 4) { // Cannabis: drifting particles
+    for (let i = 0; i < 16; i++) {
+      const x = cx + Math.sin(orbTime * .5 + i * 1.3) * r * .6;
+      const y = cy + Math.cos(orbTime * .4 + i * 1.7) * r * .6;
+      orbCtx.beginPath(); orbCtx.arc(x, y, 2, 0, Math.PI*2);
+      orbCtx.fillStyle = `rgba(${rgb},.2)`; orbCtx.fill();
+    }
+  } else if (dim === 5) { // Mescaline: concentric rings
+    for (let i = 1; i <= 4; i++) {
+      orbCtx.beginPath();
+      orbCtx.arc(cx, cy, r * i * .2 + Math.sin(orbTime + i) * 3, 0, Math.PI*2);
+      orbCtx.strokeStyle = `rgba(${rgb},.15)`; orbCtx.lineWidth = 1; orbCtx.stroke();
+    }
+  } else if (dim === 6) { // Ibogaine: spiral
+    orbCtx.beginPath();
+    for (let i = 0; i < 150; i++) {
+      const a = i * .12 + orbTime * .3;
+      const d = i * .35 + Math.sin(orbTime) * 4;
+      orbCtx.lineTo(cx + Math.cos(a) * d, cy + Math.sin(a) * d);
+    }
+    orbCtx.strokeStyle = `rgba(${rgb},.15)`; orbCtx.lineWidth = 1; orbCtx.stroke();
+  } else if (dim === 7) { // 5-MeO-DMT: void with light point
+    const pr = 4 + Math.sin(orbTime * .5) * 2;
+    const g3 = orbCtx.createRadialGradient(cx, cy, 0, cx, cy, pr * 5);
+    g3.addColorStop(0, `rgba(${rgb},.5)`); g3.addColorStop(1, 'transparent');
+    orbCtx.fillStyle = g3; orbCtx.fillRect(0, 0, w, h);
+    orbCtx.beginPath(); orbCtx.arc(cx, cy, pr, 0, Math.PI*2);
+    orbCtx.fillStyle = `rgba(${rgb},.7)`; orbCtx.fill();
+  } else if (dim === 8) { // MDMA: radiating waves
+    for (let i = 0; i < 5; i++) {
+      const wave = (orbTime * .5 + i * .8) % 4;
+      const wr = r * wave * .25;
+      const alpha = Math.max(.03, .2 - wave * .05);
+      orbCtx.beginPath(); orbCtx.arc(cx, cy, wr, 0, Math.PI*2);
+      orbCtx.strokeStyle = `rgba(${rgb},${alpha})`; orbCtx.lineWidth = 2; orbCtx.stroke();
+    }
+  } else if (dim === 9) { // Ketamine: rotating planes
+    for (let i = 0; i < 3; i++) {
+      const a = orbTime * .4 + i * Math.PI / 3;
+      orbCtx.save();
+      orbCtx.translate(cx, cy);
+      orbCtx.scale(Math.abs(Math.cos(a)), 1);
+      orbCtx.beginPath(); orbCtx.arc(0, 0, r * .6, 0, Math.PI*2);
+      orbCtx.strokeStyle = `rgba(${rgb},.18)`; orbCtx.lineWidth = 1; orbCtx.stroke();
+      orbCtx.restore();
+    }
+  }
+
+  requestAnimationFrame(drawOrb);
+}
+drawOrb();
+
+// ═══ CONTROLS ═══
+const doseSlider = document.getElementById('doseSlider');
+const doseVal = document.getElementById('doseVal');
+doseSlider.addEventListener('input', () => {
+  state.dose = DOSES[doseSlider.value];
+  doseVal.textContent = state.dose;
+});
+
+document.querySelectorAll('[data-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.lang = btn.dataset.lang;
+  });
+});
+
+document.getElementById('modeText').addEventListener('click', () => {
+  state.mode = 'text';
+  document.getElementById('modeText').classList.add('active');
+  document.getElementById('modeVoice').classList.remove('active');
+  document.getElementById('orbStatus').textContent = 'Ready';
+});
+
+document.getElementById('modeVoice').addEventListener('click', () => {
+  state.mode = 'voice';
+  document.getElementById('modeVoice').classList.add('active');
+  document.getElementById('modeText').classList.remove('active');
+  document.getElementById('orbStatus').textContent = 'Tap orb to speak';
+});
+
+// ═══ CHAT ENGINE ═══
+const messagesEl = document.getElementById('messages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const orbEl = document.getElementById('orb');
+
+// Auto-resize textarea
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+});
+
+// Welcome message
+addMessage('assistant', 'Welcome to **HOFMANN**. Select a molecule from the sidebar, and I will respond from that consciousness state.\n\nIn **voice mode**, I *become* the experience. Ctrl+click molecules to combine dimensions.');
+
+function addMessage(role, content, dims = null) {
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+
+  let headerHTML = '';
+  if (role === 'assistant') {
+    const activeDims = dims || state.dims;
+    const tags = activeDims.map(d => {
+      const m = MOLECULES.find(x => x.d === d);
+      return m ? `<span class="msg-tag" style="background:${m.color}15;color:${m.color}">${m.name}</span>` : '';
+    }).join('');
+    headerHTML = `<div class="msg-header"><span class="msg-role">HOFMANN</span>${tags}</div>`;
+  } else {
+    headerHTML = `<div class="msg-header"><span class="msg-role">You</span></div>`;
+  }
+
+  const bodyContent = role === 'assistant' ? renderMarkdown(content) : content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  div.innerHTML = `${headerHTML}<div class="msg-body">${bodyContent}</div>`;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
+}
+
+function setOrbState(s) {
+  const wrap = document.getElementById('orb');
+  wrap.className = `orb-wrap ${s}`;
+  const statusMap = {
+    '': state.mode === 'voice' ? 'Tap orb to speak' : 'Ready',
+    'listening': 'Listening...',
+    'thinking': 'Processing...',
+    'speaking': 'Speaking...',
+  };
+  document.getElementById('orbStatus').textContent = statusMap[s] || 'Ready';
+  audioEngine.setOrbState(s);
+}
+
+async function sendMessage() {
+  const msg = chatInput.value.trim();
+  if (!msg || state.processing) return;
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  state.mode === 'voice' ? await sendVoice(msg) : await sendText(msg);
+}
+
+async function sendText(msg) {
+  state.processing = true;
+  sendBtn.disabled = true;
+  setOrbState('thinking');
+  addMessage('user', msg);
+
+  const loader = document.createElement('div');
+  loader.className = 'message assistant';
+  loader.innerHTML = `<div class="msg-header"><span class="msg-role">HOFMANN</span></div><div class="msg-body"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
+  messagesEl.appendChild(loader);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  try {
+    const res = await fetch(`${API}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: msg,
+        dimensions: state.dims,
+        dose: state.dose,
+        session_id: state.sessionId,
+        language: state.lang,
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    state.sessionId = data.session_id;
+    localStorage.setItem(STORAGE_KEY, data.session_id);
+    document.getElementById('sessionInfo').textContent = `Session ${data.session_id.slice(0, 8)}`;
+
+    // Replace loader with actual response
+    const tags = state.dims.map(d => {
+      const m = MOLECULES.find(x => x.d === d);
+      return m ? `<span class="msg-tag" style="background:${m.color}15;color:${m.color}">${m.name}</span>` : '';
+    }).join('');
+    loader.innerHTML = `<div class="msg-header"><span class="msg-role">HOFMANN</span>${tags}</div><div class="msg-body">${renderMarkdown(data.response)}</div>`;
+  } catch (err) {
+    loader.querySelector('.msg-body').innerHTML = `<p style="color:#F43F5E">Error: ${err.message}</p>`;
+  }
+
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  setOrbState('');
+  state.processing = false;
+  sendBtn.disabled = false;
+  chatInput.focus();
+}
+
+async function sendVoice(msg) {
+  state.processing = true;
+  sendBtn.disabled = true;
+  setOrbState('thinking');
+  addMessage('user', msg);
+
+  const loader = document.createElement('div');
+  loader.className = 'message assistant';
+  loader.innerHTML = `<div class="msg-header"><span class="msg-role">HOFMANN</span></div><div class="msg-body"><div class="loading-dots"><span></span><span></span><span></span></div></div>`;
+  messagesEl.appendChild(loader);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  try {
+    const res = await fetch(`${API}/api/voice/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: msg,
+        dimensions: state.dims,
+        dose: state.dose,
+        session_id: state.sessionId,
+        language: state.lang,
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    state.sessionId = data.session_id;
+    localStorage.setItem(STORAGE_KEY, data.session_id);
+    document.getElementById('sessionInfo').textContent = `Session ${data.session_id.slice(0, 8)}`;
+
+    const tags = state.dims.map(d => {
+      const m = MOLECULES.find(x => x.d === d);
+      return m ? `<span class="msg-tag" style="background:${m.color}15;color:${m.color}">${m.name}</span>` : '';
+    }).join('');
+    loader.innerHTML = `<div class="msg-header"><span class="msg-role">HOFMANN</span>${tags}</div><div class="msg-body">${renderMarkdown(data.text_response)}</div>`;
+
+    // TTS playback
+    if (data.audio_available) {
+      setOrbState('speaking');
+      try {
+        const ttsRes = await fetch(`${API}/api/voice/tts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: data.text_response }),
+        });
+        if (ttsRes.ok) {
+          const blob = await ttsRes.blob();
+          const url = URL.createObjectURL(blob);
+          if (state.audioPlayer) { state.audioPlayer.pause(); }
+          state.audioPlayer = new Audio(url);
+          state.audioPlayer.onended = () => { setOrbState(''); URL.revokeObjectURL(url); };
+          state.audioPlayer.play();
+        } else { setOrbState(''); }
+      } catch { setOrbState(''); }
+    } else { setOrbState(''); }
+  } catch (err) {
+    loader.querySelector('.msg-body').innerHTML = `<p style="color:#F43F5E">Error: ${err.message}</p>`;
+    setOrbState('');
+  }
+
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  state.processing = false;
+  sendBtn.disabled = false;
+  chatInput.focus();
+}
+
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+// ═══ SPEECH RECOGNITION ═══
+const micBtn = document.getElementById('micBtn');
+let recognition = null;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onresult = (e) => {
+    chatInput.value = e.results[0][0].transcript;
+    micBtn.classList.remove('recording');
+    setOrbState('');
+    sendMessage();
+  };
+
+  recognition.onerror = () => { micBtn.classList.remove('recording'); setOrbState(''); };
+  recognition.onend = () => { micBtn.classList.remove('recording'); setOrbState(''); };
+
+  function startListening() {
+    if (state.processing) return;
+    if (state.audioPlayer) { state.audioPlayer.pause(); state.audioPlayer = null; }
+    recognition.lang = state.lang === 'nl' ? 'nl-NL' : state.lang === 'de' ? 'de-DE' : 'en-US';
+    recognition.start();
+    micBtn.classList.add('recording');
+    setOrbState('listening');
+  }
+
+  micBtn.addEventListener('click', () => {
+    micBtn.classList.contains('recording') ? recognition.stop() : startListening();
+  });
+
+  orbEl.addEventListener('click', () => {
+    if (state.mode !== 'voice') return;
+    if (orbEl.classList.contains('speaking')) {
+      if (state.audioPlayer) { state.audioPlayer.pause(); state.audioPlayer = null; }
+      setOrbState('');
+    } else if (!orbEl.classList.contains('listening') && !state.processing) {
+      startListening();
+    } else if (orbEl.classList.contains('listening')) {
+      recognition.stop();
+    }
+  });
+} else {
+  micBtn.style.display = 'none';
+}
+
+// ═══ AUDIO ENGINE ═══
+class AudioEngine {
+  constructor() {
+    this.ctx = null; this.master = null; this.active = false;
+    this.currentDim = 0; this.nodes = []; this.baseVolume = .08;
+  }
+
+  init() {
+    if (this.ctx) return;
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.master = this.ctx.createGain();
+    this.master.gain.value = 0;
+    this.master.connect(this.ctx.destination);
+  }
+
+  toggle() {
+    this.init();
+    if (this.active) { this.stop(); return false; }
+    this.active = true;
+    this.play(state.dims[0]);
+    return true;
+  }
+
+  setOrbState(s) {
+    if (!this.active || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    const vol = s === 'speaking' ? this.baseVolume * 2 : s === 'thinking' ? this.baseVolume * 1.4 : this.baseVolume;
+    this.master.gain.linearRampToValueAtTime(vol, t + .3);
+  }
+
+  stop() {
+    this.active = false;
+    if (!this.ctx) return;
+    this.master.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 1);
+    setTimeout(() => this._cleanup(), 1100);
+  }
+
+  _cleanup() {
+    this.nodes.forEach(n => { try { n.stop ? n.stop() : n.disconnect(); } catch{} });
+    this.nodes = []; this.currentDim = 0;
+  }
+
+  play(dim) {
+    if (!this.active || !this.ctx) return;
+    if (dim === this.currentDim && this.nodes.length) return;
+    const t = this.ctx.currentTime;
+    this.master.gain.linearRampToValueAtTime(0, t + .5);
+    setTimeout(() => {
+      this._cleanup();
+      this.currentDim = dim;
+      this._build(dim);
+      this.master.gain.linearRampToValueAtTime(this.baseVolume, this.ctx.currentTime + 1);
+    }, 500);
+  }
+
+  _osc(type, freq, det=0) {
+    const o = this.ctx.createOscillator();
+    o.type = type; o.frequency.value = freq; o.detune.value = det;
+    this.nodes.push(o); return o;
+  }
+
+  _gain(v=1) {
+    const g = this.ctx.createGain(); g.gain.value = v;
+    this.nodes.push(g); return g;
+  }
+
+  _filter(type, freq, q=1) {
+    const f = this.ctx.createBiquadFilter();
+    f.type = type; f.frequency.value = freq; f.Q.value = q;
+    this.nodes.push(f); return f;
+  }
+
+  _lfo(freq, min, max, param) {
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.frequency.value = freq; g.gain.value = (max-min)/2;
+    o.connect(g); g.connect(param); param.value = (max+min)/2;
+    o.start(); this.nodes.push(o, g);
+  }
+
+  _build(dim) {
+    const out = this.master;
+    if (dim === 1) { // LSD: crystalline bells
+      [523, 659, 784, 1047].forEach((f,i) => {
+        const o = this._osc('sine',f,i*3), g = this._gain(.12), fl = this._filter('bandpass',f,8);
+        o.connect(fl); fl.connect(g); g.connect(out); this._lfo(.1+i*.07,.02,.15,g.gain); o.start();
+      });
+    } else if (dim === 2) { // DMT: alien arpeggios
+      const freqs = [174,285,396,528,639]; let idx = 0;
+      const arp = () => { if (!this.active||this.currentDim!==2) return;
+        const o = this._osc('sawtooth',freqs[idx%5]*(1+Math.random()*.1));
+        const g = this._gain(.05), fl = this._filter('bandpass',800,3);
+        o.connect(fl); fl.connect(g); g.connect(out); o.start(); o.stop(this.ctx.currentTime+.1+Math.random()*.15);
+        idx++; setTimeout(arp,80+Math.random()*200); };
+      arp();
+      const dr = this._osc('sine',87), dg = this._gain(.08);
+      dr.connect(dg); dg.connect(out); dr.start();
+    } else if (dim === 3) { // Psilocybin: earth drones
+      [65,98,131].forEach((f,i) => {
+        const o = this._osc('sine',f,(i-1)*8), g = this._gain(.18), fl = this._filter('lowpass',200+i*50,.7);
+        o.connect(fl); fl.connect(g); g.connect(out); this._lfo(.02+i*.01,.05,.22,g.gain); o.start();
+      });
+    } else if (dim === 4) { // Cannabis: warm pads
+      [110,110.5,220,219.2].forEach((f,i) => {
+        const o = this._osc(i<2?'sine':'triangle',f), g = this._gain(.1), fl = this._filter('lowpass',300,.5);
+        o.connect(fl); fl.connect(g); g.connect(out); this._lfo(.015+i*.005,.04,.12,g.gain); o.start();
+      });
+    } else if (dim === 5) { // Mescaline: desert wind
+      const n = this.ctx.createBufferSource();
+      const buf = this.ctx.createBuffer(1,this.ctx.sampleRate*6,this.ctx.sampleRate);
+      const d = buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+      n.buffer=buf; n.loop=true;
+      const nf=this._filter('bandpass',400,.3), ng=this._gain(.03);
+      n.connect(nf); nf.connect(ng); ng.connect(out); this._lfo(.05,.01,.05,ng.gain); n.start(); this.nodes.push(n);
+      [147,220,294].forEach(f => { const o=this._osc('sine',f), g=this._gain(.06); o.connect(g); g.connect(out); o.start(); });
+    } else if (dim === 6) { // Ibogaine: tribal pulse
+      const b=this._osc('sine',40), bg=this._gain(.18); b.connect(bg); bg.connect(out); this._lfo(.6,.05,.2,bg.gain); b.start();
+      [80,120,160].forEach(f => { const o=this._osc('sawtooth',f), g=this._gain(.02), fl=this._filter('lowpass',150,2); o.connect(fl); fl.connect(g); g.connect(out); o.start(); });
+    } else if (dim === 7) { // 5-MeO-DMT: single tone
+      const o=this._osc('sine',432), g=this._gain(0); o.connect(g); g.connect(out); this._lfo(.02,0,.1,g.gain); o.start();
+    } else if (dim === 8) { // MDMA: heartbeat + euphoric
+      const hb=this._osc('sine',55), hg=this._gain(0); hb.connect(hg); hg.connect(out); this._lfo(1.1,0,.12,hg.gain); hb.start();
+      [262,330,392].forEach((f,i) => { const o=this._osc('sine',f,(i-1)*6), g=this._gain(.08), fl=this._filter('lowpass',600,.5); o.connect(fl); fl.connect(g); g.connect(out); this._lfo(.04+i*.01,.03,.1,g.gain); o.start(); });
+    } else if (dim === 9) { // Ketamine: metallic
+      [440,554,659,880].forEach((f,i) => { const o=this._osc('square',f), g=this._gain(.015), fl=this._filter('bandpass',f,15); o.connect(fl); fl.connect(g); g.connect(out); this._lfo(.06+i*.03,.005,.025,g.gain); o.start(); });
+      const dr=this._osc('sine',196), dg=this._gain(.05), df=this._filter('lowpass',250,3); dr.connect(df); df.connect(dg); dg.connect(out); dr.start();
+    }
+  }
+}
+
+const audioEngine = new AudioEngine();
+
+document.getElementById('audioToggle').addEventListener('click', function() {
+  const on = audioEngine.toggle();
+  this.classList.toggle('active', on);
+});
+</script>
+</body>
+</html>
