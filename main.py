@@ -317,11 +317,15 @@ async def voice_chat(req: VoiceChatRequest) -> VoiceChatResponse:
 
 class TTSRequest(BaseModel):
     text: str
+    dimension: int = 1
 
 
 @app.post("/api/voice/tts")
 async def text_to_speech(req: TTSRequest):
     """Convert text to speech audio via ElevenLabs.
+
+    Uses per-molecule voice selection — each dimension gets a unique voice
+    and voice settings tuned to match its consciousness state.
 
     Returns MP3 audio bytes.
     """
@@ -336,7 +340,7 @@ async def text_to_speech(req: TTSRequest):
         raise HTTPException(status_code=422, detail="No text provided.")
 
     try:
-        audio_bytes = await _tts.text_to_speech(req.text)
+        audio_bytes = await _tts.text_to_speech(req.text, dimension=req.dimension)
     except ElevenLabsTTSError as exc:
         logger.error("TTS error: %s", exc)
         raise HTTPException(status_code=502, detail="TTS conversion failed.") from exc

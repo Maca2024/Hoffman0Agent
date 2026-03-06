@@ -1280,7 +1280,7 @@ async function sendVoice(msg) {
         const ttsRes = await fetch(`${API}/api/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: data.text_response }),
+          body: JSON.stringify({ text: data.text_response, dimension: state.dims[0] }),
         });
         if (ttsRes.ok) {
           const blob = await ttsRes.blob();
