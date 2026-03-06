@@ -1149,7 +1149,7 @@ const MOLECULES = [
   { d:9, name:'Ketamine',  label:'Dissociative', desc:'Meta-cognition',            color:'#6366F1', glow:'99,102,241' },
 ];
 
-const API = location.hostname === 'localhost' ? 'http://localhost:8200' : '';
+const API = location.hostname === 'localhost' ? 'http://localhost:8200' : (location.port === '8300' ? '' : 'http://89.167.118.95:8300');
 const DOSES = ['micro','light','common','strong','heroic'];
 const STORAGE_KEY = 'hofmann-session';
 
